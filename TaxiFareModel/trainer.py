@@ -10,7 +10,7 @@ from TaxiFareModel.data import get_data, clean_data
 from sklearn.model_selection import train_test_split
 
 class Trainer:
-    def __init__(self, X, y, **kwargs):
+    def __init__(self, X, y):
         """
             X: pandas DataFrame
             y: pandas Series
@@ -19,18 +19,17 @@ class Trainer:
         self.pipeline = None
         self.X = X
         self.y= y
-        self.kwargs = kwargs
-        self.split = self.kwargs.get("split", True) # unhashable type: 'list'
+        self.X_train, self.X_test, self.y_train, self.y_test = train_test_split(X, y, test_size=0.3)
 
 
-    def get_estimator(self):
-        """Implement here"""
-        estimator = self.kwargs.get("estimator", "RandomForest")
-        if estimator == "RandomForest":
-            model = RandomForestRegressor()
-        elif estimator == "LinearRegression":
-            model = LinearRegression()
-        return model
+    # def get_estimator(self):
+    #     """Implement here"""
+    #     estimator = self.kwargs.get("estimator", "RandomForest")
+    #     if estimator == "RandomForest":
+    #         model = RandomForestRegressor()
+    #     elif estimator == "LinearRegression":
+    #         model = LinearRegression()
+    #     return model
 
 
     def set_pipeline(self):
@@ -51,7 +50,7 @@ class Trainer:
                                              n_jobs=None,
                                              remainder="drop")
 
-        regressor = self.get_estimator()
+        regressor = RandomForestRegressor()
 
         self.pipeline = Pipeline(steps=[
                     ('features', features_encoder),
@@ -64,8 +63,8 @@ class Trainer:
 
     def evaluate(self, X_test, y_test):
         """evaluates the pipeline on df_test and return the RMSE"""
-        y_pred = self.pipeline.predict(X_test)
-        rmse = compute_rmse(y_pred, y_test)
+        y_pred = self.pipeline.predict(self.X_test)
+        rmse = compute_rmse(y_pred, self.y_test)
         return rmse
 
 
@@ -80,11 +79,11 @@ if __name__ == "__main__":
     # hold out
     X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.3)
 
-    trainer = Trainer(X_train, y_train, estimator="RandomForest")
+    trainer = Trainer(X_train, y_train)
     # # train
     trainer.run()
     # # evaluate
-    trainer.evaluate(X_test, y_test)
+    print(trainer.evaluate(X_test, y_test))
 
 
 
