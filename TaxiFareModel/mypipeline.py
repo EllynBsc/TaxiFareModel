@@ -1,4 +1,4 @@
-from toto.transformers.distance_transformer import DistanceTransformer
+from TaxiFareModel.encoders import DistanceTransformer, TimeFeaturesEncoder
 
 from sklearn.pipeline import Pipeline, make_pipeline
 from sklearn.preprocessing import StandardScaler

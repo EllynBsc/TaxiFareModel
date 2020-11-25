@@ -184,15 +184,15 @@
 
 
 
-from TaxiFareModel.data import get_data, clean_df, holdout
-from TaxiFareModel.pipeline import MyPipeline
+from TaxiFareModel.data import get_data, clean_data, holdout
+from TaxiFareModel.mypipeline import MyPipeline
 from TaxiFareModel.metrics import compute_rmse
 from TaxiFareModel.mlflowbase import MLFlowBase
 
 from sklearn.linear_model import LinearRegression
 from sklearn.ensemble import RandomForestRegressor
 from sklearn.model_selection import GridSearchCV
-
+from sklearn.model_selection import train_test_split
 
 class Trainer(MLFlowBase):
 
@@ -249,13 +249,13 @@ class Trainer(MLFlowBase):
         df = get_data()
 
         # clean data
-        df = clean_df(df)
+        df = clean_data(df)
 
         # mlflow param
         self.mlflow_log_param("estimator", model_name)
 
         # create pipeline
-        self.pipeline = TotoPipeline(self)
+        self.pipeline = MyPipeline(self)
 
         dyn_model = self.create_estimator(model_name)
 

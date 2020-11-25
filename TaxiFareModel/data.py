@@ -1,6 +1,7 @@
 import pandas as pd
 
 AWS_BUCKET_PATH = "s3://wagon-public-datasets/taxi-fare-train.csv"
+from sklearn.model_selection import train_test_split
 
 
 def get_data(nrows=10_000):
