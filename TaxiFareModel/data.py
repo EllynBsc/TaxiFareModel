@@ -23,6 +23,15 @@ def clean_data(df, test=False):
     df = df[df["dropoff_longitude"].between(left=-74, right=-72.9)]
     return df
 
+def holdout(df):
+
+    y = df["fare_amount"]
+    X = df.drop("fare_amount", axis=1)
+
+    X_train, X_val, y_train, y_val = train_test_split(X, y, test_size=0.1)
+
+    return X_train, X_val, y_train, y_val
+
 
 if __name__ == '__main__':
     df = get_data()
